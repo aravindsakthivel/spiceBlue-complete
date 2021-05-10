@@ -1,0 +1,111 @@
+1.Getting Access Token 
+    
+    URL : https://stage.api.sloovi.com/login
+    Method : POST
+    Headers : {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',          
+              }
+    Body :    {
+                email : 'smithcheryl@yahoo.com',
+                password : '12345678'
+              }
+
+    2 Getting User ID from access token
+
+    URL : https://stage.api.sloovi.com/user
+    Method : GET
+    Headers : {
+                'Authorization': 'Bearer ' + <access_token from login step>,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',          
+              }
+    Body :    { }  
+
+
+
+/////////////////////////////////////////
+
+
+Implement These Functions on your react APP.(use access_token and user_id as a hard coded value)
+while integrating you need to add an datepicker by yourself
+
+1.Task
+
+    1.1 Adding Task
+
+    URL : https://stage.api.sloovi.com/task/lead_58be137bfde045e7a0c8d107783c4598
+    Method : POST
+    Headers : {
+                'Authorization': 'Bearer ' + <access_token from login step>,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',          
+              }
+    Body :    {
+                assigned_user:  <user_id from profile step>, 
+                task_date: <date in 'YYYY-MM-DD' format from date field in task>,
+                task_time: <time from time field in task>,integer format send seconds
+                is_completed:<0 or 1 integer data type>,
+		            time_zone:<Give timezone value in seconds and data type is integer>,
+                task_msg: <task description from task description field in task>
+               }
+
+
+    1.2 Getting All Task
+
+    URL : https://stage.api.sloovi.com/task/lead_58be137bfde045e7a0c8d107783c4598
+    Method : GET
+    Headers : {
+                'Authorization': 'Bearer ' + <access_token from login step>,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',          
+              }
+    Body :    { }   
+
+
+    1.3 Getting Single Task
+
+    URL : https://stage.api.sloovi.com/lead_58be137bfde045e7a0c8d107783c4598/<task_id_from_previous_test>
+    Method : GET
+    Headers : {
+                'Authorization': 'Bearer ' + <access_token from login step>,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',          
+              }
+    Body :    { }   
+
+
+    1.4 Updating Task
+
+    URL : https://stage.api.sloovi.com/task/lead_58be137bfde045e7a0c8d107783c4598/<task_id>
+    Method : PUT
+    Headers : {
+                'Authorization': 'Bearer ' + <access_token from login step>,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',          
+              }
+    Body :   {
+                assigned_user:  <user_id from profile step>, 
+                task_date: <date in 'YYYY-MM-DD' format from date field in task>,
+                task_time: <time from time field in task>,integer format send seconds
+                is_completed:<0 or 1 integer data type>,
+		time_zone:<Give timezone value in seconds and data type is integer>,
+                task_msg: <task description from task description field in task>
+               }                   
+
+   
+    1.5 Deleting Task
+
+    URL : https://stage.api.sloovi.com/task/lead_58be137bfde045e7a0c8d107783c4598/<task_id>
+    Method : DELETE
+    Headers : {
+                'Authorization': 'Bearer ' + <access_token from login step>,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',          
+              }
+    Body :    { }
+
+
+   ///////////////////////////////////     
+
+   
