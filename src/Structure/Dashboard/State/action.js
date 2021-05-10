@@ -1,8 +1,6 @@
 import { taskConstants } from "./actionTypes";
 import axios from "axios";
 
-const SLOVI_API = process.env.API_BASE_URL;
-
 const addNewTaskRequest = () => ({
   type: taskConstants.ADD_NEW_TASK_REQUEST,
 });
@@ -21,7 +19,7 @@ const addNewTaskProcess = (data) => async (dispatch) => {
   const token = JSON.parse(localStorage.getItem("token"));
   const config = {
     method: "post",
-    url: `https://stage.api.sloovi.com/lead_58be137bfde045e7a0c8d107783c4598`,
+    url: `https://stage.api.sloovi.com/task/lead_58be137bfde045e7a0c8d107783c4598`,
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -29,13 +27,14 @@ const addNewTaskProcess = (data) => async (dispatch) => {
   };
   try {
     const res = await axios(config);
-    console.log(res)
-    return dispatch(addNewTaskSuccess());
+    console.log(res);
+    dispatch(addNewTaskSuccess());
+    return { output: true };
   } catch (err) {
-    return dispatch(addNewTaskFailure(err.response));
+    dispatch(addNewTaskFailure(err.response));
+    return { output: false };
   }
 };
-
 
 const udpateTaskRequest = () => ({
   type: taskConstants.UPDATE_TASK_REQUEST,
@@ -50,12 +49,12 @@ const udpateTaskSuccess = () => ({
   type: taskConstants.UPDATE_TASK_SUCCESS,
 });
 
-const udpateTaskProcess = ({data, id}) => async (dispatch) => {
+const udpateTaskProcess = ({ data, id }) => async (dispatch) => {
   dispatch(udpateTaskRequest());
   const token = JSON.parse(localStorage.getItem("token"));
   const config = {
     method: "put",
-    url: `https://stage.api.sloovi.com/lead_58be137bfde045e7a0c8d107783c4598/${id}`,
+    url: `https://stage.api.sloovi.com/task/lead_58be137bfde045e7a0c8d107783c4598/${id}`,
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -64,9 +63,11 @@ const udpateTaskProcess = ({data, id}) => async (dispatch) => {
   try {
     const res = await axios(config);
     console.log(res);
-    return dispatch(udpateTaskSuccess());
+    dispatch(udpateTaskSuccess());
+    return { output: true };
   } catch (err) {
-    return dispatch(udpateTaskFailure(err.response));
+    dispatch(udpateTaskFailure(err.response));
+    return { output: false };
   }
 };
 
@@ -83,53 +84,55 @@ const deleteTaskSuccess = () => ({
   type: taskConstants.DELETE_TASK_SUCCESS,
 });
 
-const deleteTaskProcess = ({ data, id }) => async (dispatch) => {
+const deleteTaskProcess = (id) => async (dispatch) => {
   dispatch(deleteTaskRequest());
   const token = JSON.parse(localStorage.getItem("token"));
   const config = {
     method: "delete",
-    url: `https://stage.api.sloovi.com/lead_58be137bfde045e7a0c8d107783c4598/${id}`,
+    url: `https://stage.api.sloovi.com/task/lead_58be137bfde045e7a0c8d107783c4598/${id}`,
     headers: {
       Authorization: `Bearer ${token}`,
     },
-    data: data,
   };
   try {
     const res = await axios(config);
     console.log(res);
-    return dispatch(deleteTaskSuccess());
+    dispatch(deleteTaskSuccess());
+    return { output: true };
   } catch (err) {
-    return dispatch(deleteTaskFailure(err.response));
+    dispatch(deleteTaskFailure(err.response));
+    return { output: false };
   }
 };
 
 const getAllTaskRequest = () => ({
-  type: taskConstants.DELETE_TASK_REQUEST,
+  type: taskConstants.GET_ALL_TASK_REQUEST,
 });
 
 const getAllTaskFailure = (payload) => ({
-  type: taskConstants.DELETE_TASK_FAILURE,
+  type: taskConstants.GET_ALL_TASK_FAILURE,
   payload,
 });
 
-const getAllTaskSuccess = () => ({
-  type: taskConstants.DELETE_TASK_SUCCESS,
+const getAllTaskSuccess = (payload) => ({
+  type: taskConstants.GET_ALL_TASK_SUCCESS,
+  payload,
 });
 
-const getAllTaskProcess = ({ data, id }) => async (dispatch) => {
+const getAllTaskProcess = () => async (dispatch) => {
   dispatch(getAllTaskRequest());
   const token = JSON.parse(localStorage.getItem("token"));
   const config = {
-    method: "delete",
-    url: `https://stage.api.sloovi.com/lead_58be137bfde045e7a0c8d107783c4598/${id}`,
+    method: "get",
+    url: `https://stage.api.sloovi.com/task/lead_58be137bfde045e7a0c8d107783c4598`,
     headers: {
       Authorization: `Bearer ${token}`,
     },
-    data: data,
   };
   try {
     const res = await axios(config);
-    return dispatch(getAllTaskSuccess(res.result));
+    // console.log(res.data.results);
+    return dispatch(getAllTaskSuccess(res.data.results));
   } catch (err) {
     return dispatch(getAllTaskFailure(err.response));
   }
