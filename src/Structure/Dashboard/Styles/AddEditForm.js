@@ -2,11 +2,8 @@ import styled from "styled-components";
 
 export const Card = styled.div`
   width: 500px;
-  height: 430px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   background-color: #e1f5fe;
-  /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
 `;
 
 export const TopBlock = styled.div`
@@ -14,13 +11,14 @@ export const TopBlock = styled.div`
   justify-content: space-between;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   background-color: white;
+  height: 45px;
 `;
 
 export const Title = styled.div`
-  height: 45px;
-  font-size: 20px;
+  height: 20px;
+  font-size: 18px;
   padding: 5px;
-  padding-top: 15px;
+  padding-top: 10px;
   display: flex;
 `;
 
@@ -28,7 +26,6 @@ export const AddIcon = styled.button`
   font-size: 20px;
   background-color: white;
   border: 0;
-  padding: 15px;
   border-left: 1px solid rgba(0, 0, 0, 0.1);
 `;
 
@@ -41,14 +38,12 @@ export const Cancel = styled.button`
   font-size: 20px;
   border: 0;
   background-color: #e1f5fe;
-  margin-right: 10px;
 `;
 
 export const Save = styled.button`
   font-size: 20px;
-  border-radius: 5px;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding-left: 30px;
+  padding-right: 30px;
 `;
 
 export const Avatar = styled.img`
@@ -61,9 +56,28 @@ export const Avatar = styled.img`
 
 export const CoverOver = styled.div`
   width: 500px;
-  height: 370px;
+  height: 360px;
   background-color: rgba(0, 0, 0, 0.2);
   z-index: 5;
   position: absolute;
-  top: 110px;
+  top: 93px;
+`;
+
+export const Calender = styled.input`
+  padding-left: 35px;
+`
+
+export const Time = styled.input`
+  padding-left: 35px;
+  &::before{
+    content: "Time";
+    margin-right: 0.6em;
+    color: #9d9d9d;
+  }
+`;
+
+export const TaskIcon = styled.img`
+  position: absolute;
+  right: 100px;
+  top: -10px;
 `;

@@ -1,0 +1,45 @@
+input[type="date"]::-webkit-calendar-picker-indicator {
+  color: rgba(0, 0, 0, 0);
+  opacity: 1;
+  display: block;
+  width: 20px;
+  background: url(./calendar3.svg) no-repeat;
+  height: 20px;
+  position: absolute;
+  left: 0;
+  bottom: 2px;
+  border-width: thin;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  color: rgba(0, 0, 0, 0);
+  opacity: 1;
+  display: block;
+  width: 20px;
+  background: url(./clock.svg) no-repeat;
+  height: 20px;
+  position: absolute;
+  left: 5px;
+  bottom: 2px;
+  border-width: thin;
+}
+
+#taskDesc {
+  background-image: url(./card-list.svg);
+  background-repeat: no-repeat;
+  background-position: 98% 50%;
+}
+
+.timeDiv select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-position: 3% 50%;
+  background-color: #ffffff;
+  background-image: url(./clock.svg);
+  background-repeat: no-repeat;
+  background-size: 20px;
+  -ms-word-break: normal;
+  word-break: normal;
+  text-indent: 20px;
+}

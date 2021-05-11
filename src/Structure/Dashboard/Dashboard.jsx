@@ -29,15 +29,16 @@ const Dashboard = () => {
   }, [currentOper, dispatch]);
   return (
     <div className="container-fluid">
-      <Card className="m-5">
+      <Card className="m-5 shadow-sm bg-white rounded">
         <TopBlock>
-          <Title>
-            Tasks{" "}
+          <Title className="ml-3">
+            TASKS{" "}
             <p
               className="text-secondary ml-2"
               onClick={() => {
                 setOper("tasks");
               }}
+              style={{ cursor: "pointer" }}
             >
               {allTask.length}
             </p>
@@ -46,6 +47,7 @@ const Dashboard = () => {
             onClick={() => {
               setOper("add");
             }}
+            className="px-3"
           >
             +
           </AddIcon>
@@ -53,7 +55,7 @@ const Dashboard = () => {
         <BottomBlock>
           {isGettingAllTask ? (
             <div>...isLoading</div>
-          ) : currentOper === "tasks" ?  (
+          ) : currentOper === "tasks" ? (
             <TaskCard
               allTask={allTask}
               setOper={setOper}

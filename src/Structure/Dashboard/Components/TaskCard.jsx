@@ -12,7 +12,7 @@ const TaskCard = ({ allTask, setOper, setCrnEdit }) => {
     allTask !== undefined &&
     allTask.length > 0 &&
     allTask.map(({ task_msg: task, task_date: date }, index) => (
-      <div className="card m-4" key={index}>
+      <div className="card" key={index}>
         <div className="card-body d-flex justify-content-between">
           <div className="d-flex">
             <Avatar src={icon} alt="Avatar" className="avatar" />

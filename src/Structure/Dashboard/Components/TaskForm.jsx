@@ -1,7 +1,9 @@
+/* eslint-disable array-callback-return */
 import React, { useState } from "react";
-import { Cancel, Save, CoverOver } from "../Styles/AddEditForm";
+import { Cancel, Save, CoverOver, Calender } from "../Styles/AddEditForm";
 import { taskActions } from "../State/action";
 import { useDispatch, useSelector } from "react-redux";
+import "../Styles/taskFormStyle.css";
 
 const AddUpdateForm = (props) => {
   const dispatch = useDispatch();
@@ -25,8 +27,33 @@ const AddUpdateForm = (props) => {
     let time = Number(crnTask.task_time);
     let h = Math.floor(time / 3600);
     let m = Math.floor((time % 3600) / 60);
-    let hDisplay = h < 10 ? `0${h}` : h;
-    let mDisplay = m < 10 ? `0${m}` : m;
+    let mDisplay;
+    let hDisplay;
+    // Minute manipulation
+    if (h === 0 || (h < 12 && h !== 0)) {
+      if (m === 0) {
+        mDisplay = `${m}0am`;
+      } else {
+        mDisplay = `${m}am`;
+      }
+    } else if (h >= 12) {
+      hDisplay = h;
+      if (m === 0) {
+        mDisplay = `${m}0pm`;
+      } else {
+        mDisplay = `${m}pm`;
+      }
+    }
+    // Hour manipulation
+    if (h === 0) {
+      hDisplay = 12;
+    } else if (h < 12 && h !== 0) {
+      hDisplay = h;
+    } else if (h === 12) {
+      hDisplay = h;
+    } else if (h > 12) {
+      hDisplay = `${h - 12}`;
+    }
     taskObj.task_time = `${hDisplay}:${mDisplay}`;
     taskObj.task_date = crnTask.task_date;
     taskObj.task_msg = crnTask.task_msg;
@@ -36,9 +63,21 @@ const AddUpdateForm = (props) => {
   const [selTime, setTime] = useState(time);
   const handleInput = (e) => {
     if (e.target.name === "task_time") {
-      let [hours, mins] = e.target.value.split(":").map(Number);
-      hours = hours * 60 * 60;
-      mins = mins * 60;
+      let [hours, mins] = e.target.value.split(":");
+      if (mins.includes("am")) {
+        mins = mins.split("am")[0];
+        if (Number(hours) === 12) {
+          hours = 0;
+        }
+      } else {
+        mins = mins.split("pm")[0];
+        if (Number(hours) !== 12) {
+          hours = Number(hours) + 12;
+        }
+      }
+      // console.log(hours, mins);
+      hours = Number(hours) * 60 * 60;
+      mins = Number(mins) * 60;
       setTime(hours + mins);
       setTaskData({ ...taskData, task_time: e.target.value });
     } else {
@@ -46,7 +85,7 @@ const AddUpdateForm = (props) => {
     }
   };
   const deleteTask = () => {
-    if (window.confirm(`Do you really want to delete ${crnTask.task_msg}`)) {
+    if (window.confirm(`Are you sure you want to delete this Task`)) {
       let { id } = crnTask;
       dispatch(taskActions.deleteTaskProcess(id)).then((res) => {
         if (res.output) {
@@ -77,17 +116,19 @@ const AddUpdateForm = (props) => {
     }
   };
   const userName = JSON.parse(localStorage.getItem("userName"));
-  // console.log(taskData);
+  // console.log(taskData, selTime);
   return (
     <>
       {(isAddingTask || isUpdatingTask || isDeletingTask) && <CoverOver />}
       <form onSubmit={handleSubmit}>
         <div className="form-group ml-3 mr-4">
-          <label htmlFor="formGroupExampleInput">Task Description</label>
+          <label htmlFor="taskDesc" className="ml-1 mt-2">
+            Task Description
+          </label>
           <input
             type="text"
             className="form-control ml-1"
-            id="formGroupExampleInput"
+            id="taskDesc"
             placeholder="Task"
             name="task_msg"
             onChange={handleInput}
@@ -95,32 +136,76 @@ const AddUpdateForm = (props) => {
           />
         </div>
         <div className="row ml-1 mr-1">
-          <div className="col-6">
-            <label htmlFor="date">Date</label>
-            <input
+          <div className="col-6 pr-1">
+            <label htmlFor="date" className="ml-1">
+              Date
+            </label>
+            <Calender
               type="date"
               id="date"
               className="form-control"
               name="task_date"
               onChange={handleInput}
               value={taskData.task_date}
+              placeholder="Date"
             />
           </div>
-          <div className="col-6">
-            <label htmlFor="time">Time</label>
-            <input
-              type="time"
+          <div className="col-6 pl-1 timeDiv">
+            <label htmlFor="time" className="ml-1">
+              Time
+            </label>
+            <select
+              className="custom-select ml-1"
               id="time"
-              className="form-control"
-              name="task_time"
               onChange={handleInput}
+              name="task_time"
               value={taskData.task_time}
-            />
+            >
+              <option defaultValue>Time</option>
+              {new Array(24).fill(-1).map((val, ind) => {
+                if (ind === 0) {
+                  return (
+                    <React.Fragment key={ind}>
+                      <option value={`12:00am`}>{`12:00am`}</option>
+                      <option value={`12:30am`}>{`12:30am`}</option>
+                    </React.Fragment>
+                  );
+                }
+                if (ind < 12) {
+                  return (
+                    <React.Fragment key={ind}>
+                      <option value={`${ind}:00am`}>{`${ind}:00am`}</option>
+                      <option value={`${ind}:30am`}>{`${ind}:30am`}</option>
+                    </React.Fragment>
+                  );
+                } else if (ind === 12) {
+                  return (
+                    <React.Fragment key={ind}>
+                      <option value={`12:00pm`}>{`12:00pm`}</option>
+                      <option value={`12:30pm`}>{`12:30pm`}</option>
+                    </React.Fragment>
+                  );
+                } else if (ind >= 12) {
+                  return (
+                    <React.Fragment key={ind}>
+                      <option value={`${ind - 12}:00pm`}>{`${
+                        ind - 12
+                      }:00pm`}</option>
+                      <option value={`${ind - 12}:30pm`}>{`${
+                        ind - 12
+                      }:30pm`}</option>
+                    </React.Fragment>
+                  );
+                }
+              })}
+            </select>
           </div>
         </div>
         <div className="form-group ml-3 mr-4 mt-3">
-          <label htmlFor="selectName">Assign User</label>
-          <select className="custom-select" id="selectName">
+          <label htmlFor="selectName" className="ml-1">
+            Assign User
+          </label>
+          <select className="custom-select ml-1" id="selectName">
             <option value={userName} defaultValue>
               {userName}
             </option>
@@ -130,7 +215,7 @@ const AddUpdateForm = (props) => {
           {props?.currentOper !== undefined &&
             props.currentOper === "taskUpdate" && (
               <div
-                className="btn-group btn-group-toggle mr-3 mt-4 ml-2"
+                className="btn-group btn-group-toggle mr-3 mt-4 ml-3"
                 data-toggle="buttons"
               >
                 <label className="btn btn-light border">
@@ -146,8 +231,13 @@ const AddUpdateForm = (props) => {
               </div>
             )}
           <div className="float-right m-4">
-            <Cancel onClick={() => setOper("tasks")}>Cancel</Cancel>
-            <Save className="bg-success" type="submit">
+            <Cancel
+              onClick={() => setOper("tasks")}
+              className="btn btn-light mr-3"
+            >
+              Cancel
+            </Cancel>
+            <Save className="btn btn-success" type="submit">
               Save
             </Save>
           </div>
